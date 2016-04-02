@@ -1,0 +1,15 @@
+<ion-view view-title="Add New Contract">
+  <ion-content class="padding">
+    <div class="list">
+      <label class="item item-input">
+        <input type="text" placeholder="Name" ng-model="contract.name">
+      </label>
+      <label class="item item-input">
+        <input type="text" placeholder="Description" ng-model="contract.description">
+      </label>
+    </div>
+    <a class="button button-full button-positive" ng-click="save(contract)" href="#/tab/contracts">
+      Save
+    </a>
+  </ion-content>
+</ion-view>

@@ -1,50 +1,98 @@
 angular.module('starter.services', [])
 
-.factory('Chats', function() {
+.factory('Contracts', function() {
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
-  var chats = [{
-    id: 0,
-    name: 'Ben Sparrow',
-    lastText: 'You on your way?',
-    face: 'img/ben.png'
-  }, {
+  var contracts = [{
     id: 1,
-    name: 'Max Lynx',
-    lastText: 'Hey, it\'s me',
-    face: 'img/max.png'
-  }, {
-    id: 2,
-    name: 'Adam Bradleyson',
-    lastText: 'I should buy a boat',
-    face: 'img/adam.jpg'
-  }, {
-    id: 3,
-    name: 'Perry Governor',
-    lastText: 'Look at my mukluks!',
-    face: 'img/perry.png'
-  }, {
-    id: 4,
-    name: 'Mike Harrington',
-    lastText: 'This is wicked good ice cream.',
-    face: 'img/mike.png'
+    name: "Siolim Bridge",
+    description: "Bridge to connect Siolim and Chopdem"
   }];
 
   return {
     all: function() {
-      return chats;
+      return contracts;
     },
-    remove: function(chat) {
-      chats.splice(chats.indexOf(chat), 1);
+    remove: function(contract) {
+      contracts.splice(contracts.indexOf(contract), 1);
     },
-    get: function(chatId) {
-      for (var i = 0; i < chats.length; i++) {
-        if (chats[i].id === parseInt(chatId)) {
-          return chats[i];
+    add: function(contract) {
+      contract.id = contracts.length + 1;
+      contracts.push(contract);
+    },
+    get: function(contractId) {
+      for (var i = 0; i < contracts.length; i++) {
+        if (contracts[i].id === parseInt(contractId)) {
+          return contracts[i];
         }
       }
       return null;
+    }
+  };
+}).factory('Investors', function() {
+  // Might use a resource here that returns a JSON array
+
+  // Some fake testing data
+  var investors = [];
+
+  return {
+    all: function() {
+      return investors;
+    },
+    remove: function(investor) {
+      investors.splice(investors.indexOf(investor), 1);
+    },
+    get: function(investorId) {
+      for (var i = 0; i < investors.length; i++) {
+        if (investors[i].id === parseInt(investorId)) {
+          return investors[i];
+        }
+      }
+      return null;
+    }
+  };
+})
+.factory('Invoices', function() {
+  // Might use a resource here that returns a JSON array
+
+  // Some fake testing data
+  var invoices = [{
+    id: 1,
+    contract_id: 1,
+    name: "Investment",
+    description: "Invested by Vasu Niloji",
+    type: "investment",
+    amount: 10000
+  }];
+
+  return {
+    all: function() {
+      return invoices;
+    },
+    remove: function(invoice) {
+      invoices.splice(invoices.indexOf(invoice), 1);
+    },
+    add: function(invoice) {
+      invoice.id = invoices.length + 1;
+      invoices.push(invoice);
+    },
+    get: function(invoiceId) {
+      for (var i = 0; i < invoices.length; i++) {
+        if (invoices[i].id === parseInt(invoiceId)) {
+          return invoices[i];
+        }
+      }
+      return null;
+    },
+    forContract: function(contractId) {
+      resp = [];
+      for (var i = 0; i < invoices.length; i++) {
+        if (invoices[i].contract_id === parseInt(contractId)) {
+          resp.push(invoices[i]);
+        }
+      }
+      return resp;
     }
   };
 });

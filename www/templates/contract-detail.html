@@ -1,0 +1,15 @@
+<ion-view view-title="{{contract.name}}">
+  <ion-nav-buttons side="secondary">
+    <a class="button button-clear button-positive" href="#/tab/contracts/{{contract.id}}/invoices/new">Add Invoice</a>
+  </ion-nav-buttons>
+  <ion-content class="padding">
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="invoice in invoices" type="item-text-wrap">
+        <h2>{{invoice.name}}</h2>
+        <p>{{invoice.description}}</p>
+        <p>{{invoice.type}}</p>
+        <p>{{invoice.amount}}</p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

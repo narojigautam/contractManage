@@ -49,32 +49,48 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     }
   })
-
-  .state('tab.chats', {
-      url: '/chats',
+  .state('tab.contracts', {
+      url: '/contracts',
       views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
+        'tab-contracts': {
+          templateUrl: 'templates/tab-contracts.html',
+          controller: 'ContractsCtrl'
         }
       }
     })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
-        }
-      }
-    })
-
-  .state('tab.account', {
-    url: '/account',
+  .state('tab.contract-new', {
+    url: '/contracts/new',
     views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+      'tab-contracts': {
+        templateUrl: 'templates/contract-new.html',
+        controller: 'ContractNewCtrl'
+      }
+    }
+  })
+  .state('tab.invoice-new', {
+    url: '/contracts/:contractId/invoices/new',
+    views: {
+      'tab-contracts': {
+        templateUrl: 'templates/invoice-new.html',
+        controller: 'InvoiceNewCtrl'
+      }
+    }
+  })
+  .state('tab.contract-detail', {
+    url: '/contracts/:contractId',
+    views: {
+      'tab-contracts': {
+        templateUrl: 'templates/contract-detail.html',
+        controller: 'ContractDetailCtrl'
+      }
+    }
+  })
+  .state('tab.investors', {
+    url: '/investors',
+    views: {
+      'tab-investors': {
+        templateUrl: 'templates/tab-investors.html',
+        controller: 'InvestorsCtrl'
       }
     }
   });

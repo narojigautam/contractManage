@@ -1,0 +1,25 @@
+<ion-view view-title="Add New Invoice">
+  <ion-content class="padding">
+    <div class="list">
+      <label class="item item-input">
+        <input type="text" placeholder="Name" ng-model="invoice.name">
+      </label>
+      <label class="item item-input">
+        <input type="text" placeholder="Description" ng-model="invoice.description">
+      </label>
+      <label class="item item-input">
+        <select type="text" ng-model="invoice.type">
+          <option value="investment">Investment</option>
+          <option value="deduction">Deduction</option>
+          <option value="addition">Addition</option>
+        </select>
+      </label>
+      <label class="item item-input">
+        <input type="number" placeholder="Amount" ng-model="invoice.amount">
+      </label>
+    </div>
+    <a class="button button-full button-positive" ng-click="save(invoice)" href="#/tab/contracts/{{invoice.contract_id}}">
+      Save
+    </a>
+  </ion-content>
+</ion-view>
