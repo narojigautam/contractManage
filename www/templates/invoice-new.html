@@ -7,8 +7,11 @@
       <label class="item item-input">
         <input type="text" placeholder="Description" ng-model="invoice.description">
       </label>
-      <label class="item item-input">
-        <select type="text" ng-model="invoice.type">
+      <label class="item item-input item-select">
+        <div class="input-label">
+          Type
+        </div>
+        <select ng-model="invoice.type">
           <option value="investment">Investment</option>
           <option value="deduction">Deduction</option>
           <option value="addition">Addition</option>
