@@ -1,14 +1,7 @@
 angular.module('starter.services', [])
 
 .factory('Contracts', function() {
-  // Might use a resource here that returns a JSON array
-
-  // Some fake testing data
-  var contracts = [{
-    id: 1,
-    name: "Siolim Bridge",
-    description: "Bridge to connect Siolim and Chopdem"
-  }];
+  var contracts = [];
 
   return {
     all: function() {
@@ -31,9 +24,6 @@ angular.module('starter.services', [])
     }
   };
 }).factory('Investors', function() {
-  // Might use a resource here that returns a JSON array
-
-  // Some fake testing data
   var investors = [];
 
   return {
@@ -54,17 +44,7 @@ angular.module('starter.services', [])
   };
 })
 .factory('Invoices', function() {
-  // Might use a resource here that returns a JSON array
-
-  // Some fake testing data
-  var invoices = [{
-    id: 1,
-    contract_id: 1,
-    name: "Investment",
-    description: "Invested by Vasu Niloji",
-    type: "investment",
-    amount: 10000
-  }];
+  var invoices = [];
 
   return {
     all: function() {
@@ -84,15 +64,6 @@ angular.module('starter.services', [])
         }
       }
       return null;
-    },
-    forContract: function(contractId) {
-      resp = [];
-      for (var i = 0; i < invoices.length; i++) {
-        if (invoices[i].contract_id === parseInt(contractId)) {
-          resp.push(invoices[i]);
-        }
-      }
-      return resp;
     }
   };
 });
