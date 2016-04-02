@@ -33,6 +33,10 @@ angular.module('starter.services', [])
     remove: function(investor) {
       investors.splice(investors.indexOf(investor), 1);
     },
+    add: function(investor) {
+      investor.id = investors.length + 1;
+      investors.push(investor);
+    },
     get: function(investorId) {
       for (var i = 0; i < investors.length; i++) {
         if (investors[i].id === parseInt(investorId)) {

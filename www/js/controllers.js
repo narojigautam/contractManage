@@ -27,8 +27,9 @@ angular.module('starter.controllers', [])
     Contracts.add(contract);
   }
 })
-.controller('InvoiceNewCtrl', function($scope, $stateParams, Invoices) {
+.controller('InvoiceNewCtrl', function($scope, $stateParams, Invoices, Investors) {
   $scope.invoice = { contract_id: parseInt($stateParams.contractId) };
+  $scope.investors = Investors.all();
   $scope.save = function(invoice) {
     Invoices.add(invoice);
   }
@@ -38,4 +39,10 @@ angular.module('starter.controllers', [])
   $scope.remove = function(investor) {
     Investors.remove(investor);
   };
+})
+.controller('InvestorNewCtrl', function($scope, Investors) {
+  $scope.investor = {};
+  $scope.save = function(investor) {
+    Investors.add(investor);
+  }
 });

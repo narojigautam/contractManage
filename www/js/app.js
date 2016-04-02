@@ -93,6 +93,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         controller: 'InvestorsCtrl'
       }
     }
+  })
+  .state('tab.investor-new', {
+    url: '/investors/new',
+    views: {
+      'tab-investors': {
+        templateUrl: 'templates/investor-new.html',
+        controller: 'InvestorNewCtrl'
+      }
+    }
   });
 
   // if none of the above states are matched, use this as the fallback

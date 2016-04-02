@@ -17,6 +17,12 @@
           <option value="addition">Addition</option>
         </select>
       </label>
+      <label class="item item-input item-select">
+        <div class="input-label">
+          Investor
+        </div>
+        <select ng-model="invoice.investor_id" ng-options="investor as investor.name for investor in investors track by investor.id"></select>
+      </label>
       <label class="item item-input">
         <input type="number" placeholder="Amount" ng-model="invoice.amount">
       </label>
