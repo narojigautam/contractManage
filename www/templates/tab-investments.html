@@ -1,8 +1,15 @@
-<ion-view view-title="Investments">
+<ion-view cache-view="false" view-title="Investments">
   <ion-nav-buttons side="secondary">
     <a class="button button-clear button-positive" href="#/tab/investments/new">Add</a>
   </ion-nav-buttons>
   <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <div class="row">
+          <div class="col">Total Investment: {{ total_investment }}</div>
+        </div>
+      </div>
+    </div>
     <ion-list>
       <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="investment in investments" type="item-text-wrap" href="#/tab/investments/{{investment.investor.id}}">
         <h2>Name: {{investment.investor.name}}</h2>

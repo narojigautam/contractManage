@@ -6,13 +6,6 @@ angular.module('starter.services', [])
     all: function() {
       return investments;
     },
-    total: function() {
-      var tot = 0;
-      for (var i = 0; i < investments.length; i++) {
-        tot = tot + investments[i].amount;
-      }
-      return tot;
-    },
     remove: function(investment) {
       investments.splice(investments.indexOf(investment), 1);
     },

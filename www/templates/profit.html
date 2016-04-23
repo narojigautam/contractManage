@@ -1,13 +1,26 @@
-<ion-view view-title="Profit">
+<ion-view cache-view="false" view-title="Profit">
   <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <div class="row">
+          <div class="col">Total Profit: {{ total_profit }}</div>
+        </div>
+      </div>
+    </div>
     <ion-list>
       <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="contract in contracts" type="item-text-wrap">
         <h2>{{contract.name}}</h2>
         <p>{{contract.description}}</p>
         <p>Tender Amount: {{contract.tender_amount}}</p>
-        <ion-option-button class="button-assertive" ng-click="profit(contract)">
-          Calculate
-        </ion-option-button>
+        <p ng-show="contract.bill_amount">Billed Amount: {{contract.bill_amount}}</p>
+        <div ng-hide="contract.bill_amount">
+          <label class="item item-input">
+            <input type="number" placeholder="Billed Amount" ng-model="bill_amount">
+          </label>
+          <a class="button button-full button-positive" ng-click="profit(contract, bill_amount)" href="#/tab/profit">
+            Calculate Profit
+          </a>
+        </div>
       </ion-item>
     </ion-list>
   </ion-content>
