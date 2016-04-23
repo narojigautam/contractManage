@@ -1,0 +1,16 @@
+<ion-view view-title="Investments">
+  <ion-nav-buttons side="secondary">
+    <a class="button button-clear button-positive" href="#/tab/investments/new">Add</a>
+  </ion-nav-buttons>
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="investment in investments" type="item-text-wrap" href="#/tab/investments/{{investment.investor.id}}">
+        <h2>Name: {{investment.investor.name}}</h2>
+        <p>Amount: {{investment.amount}}</p>
+        <p>Date: {{investment.date}}</p>
+        <p>{{investment.description}}</p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

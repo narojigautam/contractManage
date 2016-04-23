@@ -1,0 +1,14 @@
+<ion-view view-title="Profit">
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="contract in contracts" type="item-text-wrap">
+        <h2>{{contract.name}}</h2>
+        <p>{{contract.description}}</p>
+        <p>Tender Amount: {{contract.tender_amount}}</p>
+        <ion-option-button class="button-assertive" ng-click="profit(contract)">
+          Calculate
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

@@ -7,8 +7,9 @@
       <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="invoice in invoices | filter:{contract_id: contract.id}" type="item-text-wrap">
         <h2>{{invoice.name}}</h2>
         <p>{{invoice.description}}</p>
-        <p>{{invoice.type}}</p>
-        <p>{{invoice.amount}}</p>
+        <p>Date: {{invoice.date}}</p>
+        <p>Billed By: {{invoice.investor.name}}</p>
+        <p>Amount: {{invoice.amount}}</p>
       </ion-item>
     </ion-list>
   </ion-content>

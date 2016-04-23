@@ -1,5 +1,36 @@
 angular.module('starter.services', [])
+.factory('Investments', function() {
+  var investments = [];
 
+  return {
+    all: function() {
+      return investments;
+    },
+    total: function() {
+      var tot = 0;
+      for (var i = 0; i < investments.length; i++) {
+        tot = tot + investments[i].amount;
+      }
+      return tot;
+    },
+    remove: function(investment) {
+      investments.splice(investments.indexOf(investment), 1);
+    },
+    add: function(investment) {
+      investment.id = investments.length + 1;
+      investment.date = Date.now();
+      investments.push(investment);
+    },
+    get: function(investmentId) {
+      for (var i = 0; i < investments.length; i++) {
+        if (investments[i].id === parseInt(investmentId)) {
+          return investments[i];
+        }
+      }
+      return null;
+    }
+  };
+})
 .factory('Contracts', function() {
   var contracts = [];
 
@@ -12,6 +43,7 @@ angular.module('starter.services', [])
     },
     add: function(contract) {
       contract.id = contracts.length + 1;
+      contract.date = Date.now();
       contracts.push(contract);
     },
     get: function(contractId) {
@@ -35,6 +67,7 @@ angular.module('starter.services', [])
     },
     add: function(investor) {
       investor.id = investors.length + 1;
+      investor.date = Date.now();
       investors.push(investor);
     },
     get: function(investorId) {
@@ -59,6 +92,7 @@ angular.module('starter.services', [])
     },
     add: function(invoice) {
       invoice.id = invoices.length + 1;
+      invoice.date = Date.now();
       invoices.push(invoice);
     },
     get: function(invoiceId) {

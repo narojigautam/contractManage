@@ -1,7 +1,20 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope) {})
-
+.controller('InvestmentsCtrl', function($scope, Investments) {
+  $scope.investments = Investments.all();
+  $scope.total_investment = Investments.total();
+})
+.controller('InvestmentNewCtrl', function($scope, Investments, Investors) {
+  $scope.investment = {};
+  $scope.investors = Investors.all();
+  $scope.save = function(investment) {
+    Investments.add(investment);
+  }
+})
+.controller('InvestmentDetailCtrl', function($scope, $stateParams, Investments, Investors) {
+  $scope.investments = Investments.all();
+  $scope.investor = Investors.get($stateParams.investorId);
+})
 .controller('ContractsCtrl', function($scope, Contracts) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -44,5 +57,10 @@ angular.module('starter.controllers', [])
   $scope.investor = {};
   $scope.save = function(investor) {
     Investors.add(investor);
+  }
+})
+.controller('ProfitCtrl', function($scope, Contracts) {
+  $scope.contracts = Contracts.all();
+  $scope.profit = function(contract) {
   }
 });

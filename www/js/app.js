@@ -40,12 +40,30 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
   // Each tab has its own nav history stack:
 
-  .state('tab.dash', {
-    url: '/dash',
+  .state('tab.investments', {
+    url: '/investments',
     views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
+      'tab-investments': {
+        templateUrl: 'templates/tab-investments.html',
+        controller: 'InvestmentsCtrl'
+      }
+    }
+  })
+  .state('tab.investment-new', {
+    url: '/investments/new',
+    views: {
+      'tab-investments': {
+        templateUrl: 'templates/investment-new.html',
+        controller: 'InvestmentNewCtrl'
+      }
+    }
+  })
+  .state('tab.investment-detail', {
+    url: '/investments/:investorId',
+    views: {
+      'tab-contracts': {
+        templateUrl: 'templates/investment-detail.html',
+        controller: 'InvestmentDetailCtrl'
       }
     }
   })
@@ -88,7 +106,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   .state('tab.investors', {
     url: '/investors',
     views: {
-      'tab-investors': {
+      'tab-investments': {
         templateUrl: 'templates/tab-investors.html',
         controller: 'InvestorsCtrl'
       }
@@ -97,14 +115,23 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   .state('tab.investor-new', {
     url: '/investors/new',
     views: {
-      'tab-investors': {
+      'tab-investments': {
         templateUrl: 'templates/investor-new.html',
         controller: 'InvestorNewCtrl'
+      }
+    }
+  })
+  .state('tab.profit', {
+    url: '/profit',
+    views: {
+      'tab-profit': {
+        templateUrl: 'templates/profit.html',
+        controller: 'ProfitCtrl'
       }
     }
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/tab/investments');
 
 });
