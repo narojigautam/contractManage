@@ -11,7 +11,7 @@ angular.module('starter.services', [])
     },
     add: function(investment) {
       investment.id = investments.length + 1;
-      investment.date = Date.now();
+      investment.date = Date.call();
       investments.push(investment);
     },
     get: function(investmentId) {
@@ -36,7 +36,7 @@ angular.module('starter.services', [])
     },
     add: function(contract) {
       contract.id = contracts.length + 1;
-      contract.date = Date.now();
+      contract.date = Date.call();
       contracts.push(contract);
     },
     get: function(contractId) {
@@ -60,7 +60,7 @@ angular.module('starter.services', [])
     },
     add: function(investor) {
       investor.id = investors.length + 1;
-      investor.date = Date.now();
+      investor.date = Date.call();
       investors.push(investor);
     },
     get: function(investorId) {
@@ -85,7 +85,7 @@ angular.module('starter.services', [])
     },
     add: function(invoice) {
       invoice.id = invoices.length + 1;
-      invoice.date = Date.now();
+      invoice.date = Date.call();
       invoices.push(invoice);
     },
     get: function(invoiceId) {

@@ -1,10 +1,19 @@
 angular.module('starter.controllers', [])
 
-.controller('InvestmentsCtrl', function($scope, Investments) {
+.controller('InvestmentsCtrl', function($scope, Investments, Investors) {
   $scope.investments = Investments.all();
   $scope.total_investment = 0;
+  $scope.investors = Investors.all();
   for (var i = 0; i < $scope.investments.length; i++) {
-    $scope.total_investment += $scope.investments[i].amount;
+    $scope.total_investment += parseInt($scope.investments[i].amount);
+    for (var j = 0; j < $scope.investors.length; j++) {
+      if ($scope.investors[j].id == $scope.investments[i].investor.id) {
+        if (typeof($scope.investors[j].amount_invested) == "undefined") {
+          $scope.investors[j].amount_invested = 0;
+        }
+        $scope.investors[j].amount_invested += parseInt($scope.investments[i].amount);
+      }
+    }
   }
 })
 .controller('InvestmentNewCtrl', function($scope, Investments, Investors) {
@@ -32,10 +41,10 @@ angular.module('starter.controllers', [])
   $scope.total_tender = 0;
   var invoices = Invoices.all();
   for (var i = 0; i < invoices.length; i++) {
-    $scope.total_expense += invoices[i].amount;
+    $scope.total_expense += parseInt(invoices[i].amount);
   }
   for (var i = 0; i < $scope.contracts.length; i++) {
-    $scope.total_tender += $scope.contracts[i].tender_amount;
+    $scope.total_tender += parseInt($scope.contracts[i].tender_amount);
   }
 })
 
@@ -71,17 +80,18 @@ angular.module('starter.controllers', [])
 .controller('ProfitCtrl', function($scope, Contracts, Investments) {
   $scope.contracts = Contracts.all();
   $scope.bill_amount = 0;
+  var investments = Investments.all();
   var total_bill = 0;
-  var total_tender = 0;
+  var total_expense = 0;
   for (var i = 0; i < $scope.contracts.length; i++) {
     if(!(typeof($scope.contracts[i].bill_amount) == "undefined")) {
-      total_bill += $scope.contracts[i].bill_amount;
-    }
-    if(!(typeof($scope.contracts[i].tender_amount) == "undefined")) {
-      total_tender += $scope.contracts[i].tender_amount;
+      total_bill += parseInt($scope.contracts[i].bill_amount);
     }
   }
-  $scope.total_profit = total_tender - total_bill;
+  for (var j = 0; j < investments.length; j++) {
+    total_expense += parseInt(investments[j].amount);
+  }
+  $scope.total_profit = total_expense - total_bill;
   $scope.profit = function(contract, bill_amount) {
     contract.bill_amount = bill_amount;
     var profit_amt = contract.tender_amount - bill_amount;

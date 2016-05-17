@@ -7,6 +7,7 @@
       <div class="item item-text-wrap">
         <div class="row">
           <div class="col">Total Investment: {{ total_investment }}</div>
+          <div ng-repeat="investor in investors" class="col">{{investor.name}}: {{ investor.amount_invested }}</div>
         </div>
       </div>
     </div>
