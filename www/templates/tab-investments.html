@@ -15,7 +15,7 @@
       <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="investment in investments" type="item-text-wrap" href="#/tab/investments/{{investment.investor.id}}">
         <h2>Name: {{investment.investor.name}}</h2>
         <p>Amount: {{investment.amount}}</p>
-        <p>Date: {{investment.date}}</p>
+        <p>Date: {{investment.date | date: 'dd MMM yyyy'}}</p>
         <p>{{investment.description}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>

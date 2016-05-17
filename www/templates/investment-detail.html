@@ -3,7 +3,7 @@
     <ion-list>
       <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="investment in investments | filter:{investor: {id: investor.id}}" type="item-text-wrap">
         <p>Amount: {{investment.amount}}</p>
-        <p>Date: {{investment.date}}</p>
+        <p>Date: {{investment.date | date: 'dd MMM yyyy'}}</p>
         <p>{{investment.description}}</p>
       </ion-item>
     </ion-list>
