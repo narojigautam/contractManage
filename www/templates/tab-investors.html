@@ -4,9 +4,17 @@
   </ion-nav-buttons>
   <ion-content>
     <div class="card">
+      <div class="item item-divider">
+        Total Summary
+      </div>
       <div class="item item-text-wrap">
         <div class="row">
-          <div class="col">Total Investment: {{ total_investment }}</div>
+          <div class="col">Invested: {{ total_investment }}</div>
+          <div class="col">Balance: {{ total_balance }}</div>
+        </div>
+        <div class="row">
+          <div class="col">Expense: {{ total_expense }}</div>
+          <div class="col">Profit: {{ total_profit }}</div>
         </div>
       </div>
     </div>

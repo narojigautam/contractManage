@@ -5,10 +5,13 @@
         <input type="text" placeholder="Name" ng-model="contract.name">
       </label>
       <label class="item item-input">
-        <input type="text" placeholder="Tender Amount" ng-model="contract.tender_amount">
+        <input type="number" placeholder="Tender Amount" ng-model="contract.tender_amount">
       </label>
       <label class="item item-input">
         <input type="text" placeholder="Description" ng-model="contract.description">
+      </label>
+      <label class="item item-input">
+        <input type="date" placeholder="Date" ng-model="contract.date">
       </label>
     </div>
     <a class="button button-full button-positive" ng-click="save(contract)" href="#/tab/contracts">

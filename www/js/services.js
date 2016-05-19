@@ -35,7 +35,6 @@ angular.module('starter.services', [])
     },
     add: function(contract) {
       contract.id = contracts.length + 1;
-      contract.date = Date.call();
       contracts.push(contract);
     },
     get: function(contractId) {
