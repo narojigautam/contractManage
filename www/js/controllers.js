@@ -1,8 +1,12 @@
 angular.module('starter.controllers', [])
 
-.controller('InvestmentsCtrl', function($scope, Investments, Investors) {
+.controller('InvestmentsCtrl', function($scope, $stateParams, Investments) {
+  $scope.title = $stateParams.filterBy;
+  $scope.filterBy = {};
+  if($stateParams.filterBy == "Profit") {
+    $scope.filterBy = {is_profit: true};
+  }
   $scope.investments = Investments.all();
-  $scope.investors = Investors.all();
 })
 .controller('InvestmentNewCtrl', function($scope, $stateParams, Investments, Investors) {
   $scope.investor = Investors.get($stateParams.investorId)
@@ -31,13 +35,13 @@ angular.module('starter.controllers', [])
     $scope.total_tender += parseInt($scope.contracts[i].tender_amount);
   }
   $scope.total_expense_for = function(contractId) {
-    var total = 0;
+    var totalx = 0;
     for (var i = 0; i < $scope.expenses.length; i++) {
       if (contractId == $scope.expenses[i].contract_id) {
-        total += parseInt($scope.expenses[i].amount);
+        totalx += parseInt($scope.expenses[i].amount);
       }
     }
-    return total;
+    return totalx;
   }
 })
 
@@ -79,7 +83,7 @@ angular.module('starter.controllers', [])
   $scope.total_investment_for = function(investorId) {
     var total = 0;
     for (var i = 0; i < $scope.investments.length; i++) {
-      if (investorId == $scope.investments[i].investor.id) {
+      if (!$scope.investments[i].is_profit && investorId == $scope.investments[i].investor.id) {
         total += parseInt($scope.investments[i].amount);
       }
     }
@@ -118,6 +122,6 @@ angular.module('starter.controllers', [])
       }
     }
     contract.profit_amount = parseInt(bill_amount) - expenses_amount;
-    Investments.add({amount: contract.profit_amount, description: "Profit from " + contract.name, is_profit: true})
+    Investments.add({amount: contract.profit_amount, description: "Profit from " + contract.name, is_profit: true, date: Date.call()})
   }
 });

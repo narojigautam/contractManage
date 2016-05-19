@@ -41,7 +41,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   // Each tab has its own nav history stack:
 
   .state('tab.investments', {
-    url: '/investments',
+    url: '/investments/:filterBy',
     views: {
       'tab-investors': {
         templateUrl: 'templates/tab-investments.html',
