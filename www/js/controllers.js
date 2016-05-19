@@ -2,32 +2,16 @@ angular.module('starter.controllers', [])
 
 .controller('InvestmentsCtrl', function($scope, Investments, Investors) {
   $scope.investments = Investments.all();
-  $scope.total_investment = 0;
   $scope.investors = Investors.all();
-  for (var i = 0; i < $scope.investments.length; i++) {
-    $scope.total_investment += parseInt($scope.investments[i].amount);
-    for (var j = 0; j < $scope.investors.length; j++) {
-      if ($scope.investors[j].id == $scope.investments[i].investor.id) {
-        if (typeof($scope.investors[j].amount_invested) == "undefined") {
-          $scope.investors[j].amount_invested = 0;
-        }
-        $scope.investors[j].amount_invested += parseInt($scope.investments[i].amount);
-      }
-    }
-  }
 })
-.controller('InvestmentNewCtrl', function($scope, Investments, Investors) {
-  $scope.investment = {};
-  $scope.investors = Investors.all();
+.controller('InvestmentNewCtrl', function($scope, $stateParams, Investments, Investors) {
+  $scope.investor = Investors.get($stateParams.investorId)
+  $scope.investment = {investor: $scope.investor};
   $scope.save = function(investment) {
     Investments.add(investment);
   }
 })
-.controller('InvestmentDetailCtrl', function($scope, $stateParams, Investments, Investors) {
-  $scope.investments = Investments.all();
-  $scope.investor = Investors.get($stateParams.investorId);
-})
-.controller('ContractsCtrl', function($scope, Contracts, Invoices) {
+.controller('ContractsCtrl', function($scope, Contracts, Expenses) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -39,18 +23,18 @@ angular.module('starter.controllers', [])
   $scope.contracts = Contracts.all();
   $scope.total_expense = 0;
   $scope.total_tender = 0;
-  var invoices = Invoices.all();
-  for (var i = 0; i < invoices.length; i++) {
-    $scope.total_expense += parseInt(invoices[i].amount);
+  var expenses = Expenses.all();
+  for (var i = 0; i < expenses.length; i++) {
+    $scope.total_expense += parseInt(expenses[i].amount);
   }
   for (var i = 0; i < $scope.contracts.length; i++) {
     $scope.total_tender += parseInt($scope.contracts[i].tender_amount);
   }
 })
 
-.controller('ContractDetailCtrl', function($scope, $stateParams, Contracts, Invoices) {
+.controller('ContractDetailCtrl', function($scope, $stateParams, Contracts, Expenses) {
   $scope.contract = Contracts.get($stateParams.contractId);
-  $scope.invoices = Invoices.all();
+  $scope.expenses = Expenses.all();
 })
 .controller('ContractNewCtrl', function($scope, Contracts) {
   $scope.contract = {};
@@ -58,15 +42,29 @@ angular.module('starter.controllers', [])
     Contracts.add(contract);
   }
 })
-.controller('InvoiceNewCtrl', function($scope, $stateParams, Invoices, Investors) {
-  $scope.invoice = { contract_id: parseInt($stateParams.contractId) };
+.controller('ExpenseNewCtrl', function($scope, $stateParams, Expenses, Investors) {
+  $scope.expense = { contract_id: parseInt($stateParams.contractId) };
   $scope.investors = Investors.all();
-  $scope.save = function(invoice) {
-    Invoices.add(invoice);
+  $scope.save = function(expense) {
+    Expenses.add(expense);
   }
 })
-.controller('InvestorsCtrl', function($scope, Investors) {
+.controller('InvestorsCtrl', function($scope, Investors, Investments) {
   $scope.investors = Investors.all();
+  $scope.investments = Investments.all();
+  $scope.total_investment = 0;
+  for (var i = 0; i < $scope.investments.length; i++) {
+    $scope.total_investment += parseInt($scope.investments[i].amount);
+  }
+  $scope.total_investment_for = function(investorId) {
+    var total = 0;
+    for (var i = 0; i < $scope.investments.length; i++) {
+      if (investorId == $scope.investments[i].investor.id) {
+        total += parseInt($scope.investments[i].amount);
+      }
+    }
+    return total;
+  }
   $scope.remove = function(investor) {
     Investors.remove(investor);
   };
@@ -76,6 +74,10 @@ angular.module('starter.controllers', [])
   $scope.save = function(investor) {
     Investors.add(investor);
   }
+})
+.controller('InvestorDetailCtrl', function($scope, $stateParams, Investors, Investments) {
+  $scope.investments = Investments.all();
+  $scope.investor = Investors.get($stateParams.investorId);
 })
 .controller('ProfitCtrl', function($scope, Contracts, Investments) {
   $scope.contracts = Contracts.all();

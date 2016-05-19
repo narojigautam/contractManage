@@ -1,15 +1,6 @@
 <ion-view view-title="Add New Investment">
-  <ion-nav-buttons side="secondary">
-    <a class="button button-clear button-positive" href="#/tab/investors">Investors</a>
-  </ion-nav-buttons>
   <ion-content class="padding">
     <div class="list">
-      <label class="item item-input item-select">
-        <div class="input-label">
-          Select Investor
-        </div>
-        <select ng-model="investment.investor" ng-options="investor as investor.name for investor in investors track by investor.name"></select>
-      </label>
       <label class="item item-input">
         <input type="number" placeholder="Amount Invested" ng-model="investment.amount">
       </label>
@@ -20,7 +11,7 @@
         <input type="date" placeholder="Date" ng-model="investment.date">
       </label>
     </div>
-    <a class="button button-full button-positive" ng-click="save(investment)" href="#/tab/investments">
+    <a class="button button-full button-positive" ng-click="save(investment)" href="#/tab/investors/{{investor.id}}">
       Save
     </a>
   </ion-content>

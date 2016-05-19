@@ -1,11 +1,19 @@
-<ion-view view-title="Investors">
+<ion-view cache-view="false" view-title="Investors">
   <ion-nav-buttons side="secondary">
     <a class="button button-clear button-positive" href="#/tab/investors/new">Add</a>
   </ion-nav-buttons>
   <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <div class="row">
+          <div class="col">Total Investment: {{ total_investment }}</div>
+        </div>
+      </div>
+    </div>
     <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="investor in investors" type="item-text-wrap">
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="investor in investors" type="item-text-wrap" href="#/tab/investors/{{investor.id}}">
         <h2>{{investor.name}}</h2>
+        <p>Total investment: {{total_investment_for(investor.id) || 0}}</p>
         <ion-option-button class="button-assertive" ng-click="remove(investor)">
           Delete
         </ion-option-button>

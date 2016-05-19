@@ -43,27 +43,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   .state('tab.investments', {
     url: '/investments',
     views: {
-      'tab-investments': {
+      'tab-investors': {
         templateUrl: 'templates/tab-investments.html',
         controller: 'InvestmentsCtrl'
       }
     }
   })
   .state('tab.investment-new', {
-    url: '/investments/new',
+    url: '/investors/:investorId/investments/new',
     views: {
-      'tab-investments': {
+      'tab-investors': {
         templateUrl: 'templates/investment-new.html',
         controller: 'InvestmentNewCtrl'
-      }
-    }
-  })
-  .state('tab.investment-detail', {
-    url: '/investments/:investorId',
-    views: {
-      'tab-contracts': {
-        templateUrl: 'templates/investment-detail.html',
-        controller: 'InvestmentDetailCtrl'
       }
     }
   })
@@ -85,12 +76,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     }
   })
-  .state('tab.invoice-new', {
-    url: '/contracts/:contractId/invoices/new',
+  .state('tab.expense-new', {
+    url: '/contracts/:contractId/expenses/new',
     views: {
       'tab-contracts': {
-        templateUrl: 'templates/invoice-new.html',
-        controller: 'InvoiceNewCtrl'
+        templateUrl: 'templates/expense-new.html',
+        controller: 'ExpenseNewCtrl'
       }
     }
   })
@@ -106,7 +97,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   .state('tab.investors', {
     url: '/investors',
     views: {
-      'tab-investments': {
+      'tab-investors': {
         templateUrl: 'templates/tab-investors.html',
         controller: 'InvestorsCtrl'
       }
@@ -115,9 +106,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   .state('tab.investor-new', {
     url: '/investors/new',
     views: {
-      'tab-investments': {
+      'tab-investors': {
         templateUrl: 'templates/investor-new.html',
         controller: 'InvestorNewCtrl'
+      }
+    }
+  })
+  .state('tab.investor-detail', {
+    url: '/investors/:investorId',
+    views: {
+      'tab-investors': {
+        templateUrl: 'templates/investor-detail.html',
+        controller: 'InvestorDetailCtrl'
       }
     }
   })
@@ -132,6 +132,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/investments');
+  $urlRouterProvider.otherwise('/tab/investors');
 
 });

@@ -1,0 +1,21 @@
+<ion-view view-title="Add New Expense">
+  <ion-content class="padding">
+    <div class="list">
+      <label class="item item-input">
+        <input type="text" placeholder="Name" ng-model="expense.name">
+      </label>
+      <label class="item item-input">
+        <input type="text" placeholder="Description" ng-model="expense.description">
+      </label>
+      <label class="item item-input">
+        <input type="number" placeholder="Amount" ng-model="expense.amount">
+      </label>
+      <label class="item item-input">
+        <input type="date" placeholder="Date" ng-model="expense.date">
+      </label>
+    </div>
+    <a class="button button-full button-positive" ng-click="save(expense)" href="#/tab/contracts/{{expense.contract_id}}">
+      Save
+    </a>
+  </ion-content>
+</ion-view>
