@@ -17,7 +17,7 @@
         <p>{{contract.description}}</p>
         <p>Date: {{contract.date | date: 'dd MMM yyyy'}}</p>
         <p>Tender Amount: {{contract.tender_amount}}</p>
-        <p>Expense Amount: {{total_expense_for(contract.id)}}</p>
+        <p>Expense Amount: {{ total_expense_for(contract.id) }}</p>
         <p ng-show="contract.bill_amount">Bill Amount: {{contract.bill_amount}}</p>
         <p ng-show="contract.profit_amount">Profit Amount: {{contract.profit_amount}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>

@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $cordovaSQLite) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -20,6 +20,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    if(window.cordova) {
+      db = $cordovaSQLite.openDB("contractManage.db");
+    } else {
+      db = window.openDatabase("contractManage.db", "1.0", "ContractMgr", -1);
+    }
+
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS investors (id integer primary key, name text)");
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS investments (id integer primary key, investor_id integer, amount integer, date datetime, description text, is_profit boolean)");
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS contracts (id integer primary key, name text, tender_amount integer, date datetime, description text, profit_amount integer, bill_amount integer)");
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS expenses (id integer primary key, name text, description text, amount integer, date datetime, contract_id integer)");
   });
 })
 

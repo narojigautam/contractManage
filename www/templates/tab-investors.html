@@ -10,7 +10,7 @@
       <div class="item item-text-wrap">
         <div class="row">
           <div class="col"><a href="#/tab/investments/Investment">Invested:</a> {{ total_investment }}</div>
-          <div class="col"><a href="#/tab/investments/All">Balance:</a> {{ total_balance }}</div>
+          <div class="col"><a href="#/tab/investments/All">Balance:</a> {{ total_investment + total_profit - total_expense }}</div>
         </div>
         <div class="row">
           <div class="col">Expense: {{ total_expense }}</div>
@@ -19,12 +19,10 @@
       </div>
     </div>
     <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="investor in investors" type="item-text-wrap" href="#/tab/investors/{{investor.id}}">
-        <h2>{{investor.name}}</h2>
-        <p>Total investment: {{total_investment_for(investor.id)}}</p>
-        <ion-option-button class="button-assertive" ng-click="remove(investor)">
-          Delete
-        </ion-option-button>
+      <ion-item class="item item-icon-right" ng-repeat="investor in investors" type="item-text-wrap" href="#/tab/investors/{{investor.id}}">
+        <h2>{{investor.id}} : {{investor.name}}</h2>
+        <p>Total investment: {{ total_investment_for(investor.id) }}</p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
     </ion-list>
   </ion-content>
