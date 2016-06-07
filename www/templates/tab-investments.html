@@ -1,8 +1,8 @@
 <ion-view cache-view="false" view-title="{{title}}">
   <ion-content>
     <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="investment in investments | filter: filterBy" type="item-text-wrap">
-        <h2>Name: {{investment.investor.name}}</h2>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="investment in investments | filter: filterBy | orderBy:'date'" type="item-text-wrap">
+        <h2>Name: {{investment.investor ? investment.investor.name : "Expense"}}</h2>
         <p>Amount: {{investment.amount}}</p>
         <p>Date: {{investment.date | date: 'dd MMM yyyy'}}</p>
         <p>{{investment.description}}</p>

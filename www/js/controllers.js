@@ -1,12 +1,15 @@
 angular.module('starter.controllers', [])
 
-.controller('InvestmentsCtrl', function($scope, $stateParams, Investments) {
+.controller('InvestmentsCtrl', function($scope, $stateParams, Investments, Expenses) {
   $scope.title = $stateParams.filterBy;
   $scope.filterBy = {};
   if($stateParams.filterBy == "Profit") {
     $scope.filterBy = {is_profit: true};
   }
   $scope.investments = Investments.all();
+  if($stateParams.filterBy == "All") {
+    $scope.investments = $scope.investments.concat(Expenses.all());
+  }
 })
 .controller('InvestmentNewCtrl', function($scope, $stateParams, Investments, Investors) {
   $scope.investor = Investors.get($stateParams.investorId)
