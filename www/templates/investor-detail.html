@@ -1,13 +1,14 @@
-<ion-view cache-view="false" view-title="{{investor.name}}'s Investments">
+<ion-view cache-view="false" view-title="Investments">
   <ion-nav-buttons side="secondary">
     <a class="button button-clear button-positive" href="#/tab/investors/{{investor_id}}/investments/new">Add Investment</a>
   </ion-nav-buttons>
   <ion-content class="padding">
     <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="investment in investments" type="item-text-wrap">
+      <ion-item class="item item-button-right" ng-repeat="investment in investments" type="item-text-wrap">
         <p>Amount: {{investment.amount}}</p>
         <p>Date: {{investment.date | date: 'dd MMM yyyy'}}</p>
         <p>{{investment.description}}</p>
+        <ion-option-button class="ion-minus-circled" ng-click="removeInvestment(investment)"></ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>

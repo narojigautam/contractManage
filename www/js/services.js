@@ -42,12 +42,12 @@ angular.module('starter.services', [])
 .factory('Investments', function($cordovaSQLite, DBA) {
   return {
     all: function() {
-      return DBA.query("SELECT * FROM investments").then(function(result){
+      return DBA.query("SELECT * FROM investments ORDER BY date DESC").then(function(result){
         return DBA.getAll(result);
       });
     },
     get_for: function(investor_id) {
-      return DBA.query("SELECT * FROM investments WHERE investor_id = (?)",[investor_id]).then(function(result){
+      return DBA.query("SELECT * FROM investments WHERE investor_id = (?) ORDER BY DATE DESC",[investor_id]).then(function(result){
         return DBA.getAll(result);
       });
     },
@@ -70,18 +70,18 @@ angular.module('starter.services', [])
       return DBA.query("UPDATE investments SET id = (?), investor_id = (?), amount = (?), date = (?), description = (?) WHERE id = (?)", parameters);
     },
     total_investment: function(){
-      return DBA.query("Select TOTAL(amount) as total FROM investments WHERE is_profit IS NOT 'true'").then(function(result){
+      return DBA.query("Select TOTAL(amount) as total FROM investments WHERE investor_id IS NOT 'undefined'").then(function(result){
         return DBA.getAll(result)[0].total;
       });
     },
     total_profit: function(){
-      return DBA.query("Select TOTAL(amount) as total FROM investments WHERE is_profit IS 'true'").then(function(result){
+      return DBA.query("Select TOTAL(amount) as total FROM investments WHERE investor_id IS 'undefined'").then(function(result){
         return DBA.getAll(result)[0].total;
       });
     },
     total_investment_for: function(id){
       return DBA.query("Select TOTAL(amount) as total FROM investments WHERE investor_id = (?)",[id]).then(function(result){
-        return DBA.getById(result);
+        return DBA.getById(result).total;
       });
     }
   };
@@ -116,7 +116,7 @@ angular.module('starter.services', [])
 .factory('Contracts', function($cordovaSQLite, DBA) {
   return {
     all: function() {
-      return DBA.query("SELECT * FROM contracts").then(function(result){
+      return DBA.query("SELECT * FROM contracts ORDER BY date DESC").then(function(result){
         return DBA.getAll(result);
       });
     },
@@ -148,7 +148,7 @@ angular.module('starter.services', [])
 .factory('Expenses', function($cordovaSQLite, DBA) {
   return {
     all: function() {
-      return DBA.query("SELECT * FROM expenses").then(function(result){
+      return DBA.query("SELECT * FROM expenses ORDER BY date DESC").then(function(result){
         return DBA.getAll(result);
       });
     },
@@ -171,9 +171,14 @@ angular.module('starter.services', [])
         return DBA.getAll(result)[0].total;
       });
     },
-    total_for: function(id) {
-      return DBA.query("Select TOTAL(amount) as total FROM expenses WHERE contract_id = (?)", [id]).then(function(result){
-        return DBA.getById(result);
+    all_for: function(contract_id) {
+      return DBA.query("Select * FROM expenses WHERE contract_id = (?) ORDER BY date DESC", [contract_id]).then(function(result){
+        return DBA.getAll(result);
+      });
+    },
+    total_for: function(contract_id) {
+      return DBA.query("Select TOTAL(amount) as total FROM expenses WHERE contract_id = (?)", [contract_id]).then(function(result){
+        return DBA.getById(result).total;
       });
     }
   };

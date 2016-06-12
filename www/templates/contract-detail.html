@@ -1,14 +1,15 @@
-<ion-view view-title="{{contract.name}}">
+<ion-view cache-view="false" view-title="{{contract.name}}">
   <ion-nav-buttons side="secondary">
     <a class="button button-clear button-positive" ng-hide="contract.bill_amount" href="#/tab/contracts/{{contract.id}}/expenses/new">Add Expense</a>
   </ion-nav-buttons>
   <ion-content class="padding">
     <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="expense in expenses | filter:{contract_id: contract.id}" type="item-text-wrap">
-        <h2>{{expense.name}}</h2>
-        <p>{{expense.description}}</p>
-        <p>Date: {{expense.date | date: 'dd MMM yyyy'}}</p>
-        <p>Amount: {{expense.amount}}</p>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="expense in expenses" type="item-text-wrap">
+        <h2>{{ expense.name }}</h2>
+        <p>{{ expense.description }}</p>
+        <p>Date: {{ expense.date | date: 'dd MMM yyyy' }}</p>
+        <p>Amount: {{ expense.amount }}</p>
+        <ion-option-button class="ion-minus-circled" ng-click="removeExpense(expense)"></ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>

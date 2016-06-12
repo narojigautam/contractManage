@@ -28,7 +28,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
 
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS investors (id integer primary key, name text)");
-    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS investments (id integer primary key, investor_id integer, amount integer, date datetime, description text, is_profit boolean)");
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS investments (id integer primary key, investor_id integer, amount integer, date datetime, description text)");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS contracts (id integer primary key, name text, tender_amount integer, date datetime, description text, profit_amount integer, bill_amount integer)");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS expenses (id integer primary key, name text, description text, amount integer, date datetime, contract_id integer)");
   });
@@ -52,7 +52,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   // Each tab has its own nav history stack:
 
   .state('tab.investments', {
-    url: '/investments/:filterBy',
+    url: '/investments',
     views: {
       'tab-investors': {
         templateUrl: 'templates/tab-investments.html',

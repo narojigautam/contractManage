@@ -1,11 +1,11 @@
-<ion-view cache-view="false" view-title="{{title}}">
+<ion-view view-title="History">
   <ion-content>
     <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="investment in investments | filter: filterBy | orderBy:'date'" type="item-text-wrap">
-        <h2>Name: {{investment.investor_id ? "Investment" : investment.is_profit ? "Profit" : "Expense"}}</h2>
-        <p>Amount: {{investment.amount}}</p>
-        <p>Date: {{investment.date | date: 'dd MMM yyyy'}}</p>
-        <p>{{investment.description}}</p>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="entry in enteries" type="item-text-wrap">
+        <h2>Name: {{ title_of(entry) }}</h2>
+        <p>Amount: {{ entry.amount }}</p>
+        <p>Date: {{ entry.date | date: 'dd MMM yyyy' }}</p>
+        <p>{{ entry.description }}</p>
       </ion-item>
     </ion-list>
   </ion-content>

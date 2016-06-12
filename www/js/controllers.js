@@ -1,19 +1,27 @@
 angular.module('starter.controllers', [])
 
 .controller('InvestmentsCtrl', function($scope, $stateParams, Investments, Expenses, Investors) {
-  $scope.title = $stateParams.filterBy;
-  $scope.filterBy = {};
-  if($stateParams.filterBy == "Profit") {
-    $scope.filterBy = {is_profit: true};
-  }
   Investments.all().then(function(res){
-    $scope.investments = res;
+    $scope.enteries = res;
   });
-  if($stateParams.filterBy == "All") {
-    Expenses.all().then(function(res){
-      $scope.investments = $scope.investments.concat(res);
-    });
-  }
+  Expenses.all().then(function(res){
+    $scope.enteries = $scope.enteries.concat(res);
+  });
+  $scope.removeEntry = function(entry) {
+    Investments.remove(investment);
+  };
+  $scope.title_of = function(entry) {
+    if (typeof(entry.investor_id) != "undefined" && entry.investor_id != 'undefined' && entry.investor_id != '') {
+      Investors.get(entry.investor_id).then(function(res){
+        entry.title = res.name;
+      });
+    } else if (typeof(entry.investor_id) != "undefined" && entry.investor_id == 'undefined') {
+      entry.title = "From Profit";
+    } else {
+      entry.title = "Expense";
+    }
+    return entry.title;
+  };
 })
 .controller('InvestmentNewCtrl', function($scope, $stateParams, Investments, Investors) {
   $scope.investment = {investor_id: $stateParams.investorId};
@@ -33,19 +41,17 @@ angular.module('starter.controllers', [])
   Contracts.all().then(function(res){
     $scope.contracts = res;
   });
-  Expenses.all().then(function(res){
-    $scope.expenses = res;
-  });
   Expenses.total_expense().then(function(res){
     $scope.total_expense = res;
   });
   Contracts.total_tender().then(function(res){
     $scope.total_tender = res;
   });
-  $scope.total_expense_for = function(contractId) {
-    return Expenses.total_for(contractId).then(function(res){
-      return res.total;
+  $scope.total_expense_for = function(contract) {
+    Expenses.total_for(contract.id).then(function(res){
+      contract.total_expense = res;
     });
+    return contract.total_expense;
   }
 })
 
@@ -53,9 +59,15 @@ angular.module('starter.controllers', [])
   Contracts.get($stateParams.contractId).then(function(res){
     $scope.contract = res;
   });
-  Expenses.all().then(function(res){
+  Expenses.all_for($stateParams.contractId).then(function(res){
     $scope.expenses = res;
   });
+  $scope.removeExpense = function(expense) {
+    Expenses.remove(expense);
+    Expenses.all_for($stateParams.contractId).then(function(res){
+      $scope.expenses = res;
+    });
+  };
 })
 .controller('ContractNewCtrl', function($scope, Contracts) {
   $scope.contract = {};
@@ -88,10 +100,11 @@ angular.module('starter.controllers', [])
   Expenses.total_expense().then(function(res){
     $scope.total_expense = res;
   });
-  $scope.total_investment_for = function(investorId) {
-    return Investments.total_investment_for(investorId).then(function(res){
-      return res;
+  $scope.total_investment_for = function(investor) {
+    Investments.total_investment_for(investor.id).then(function(res){
+      investor.total_investment = res;
     });
+    return investor.total_investment;
   }
   $scope.remove = function(investor) {
     Investors.remove(investor);
@@ -111,6 +124,12 @@ angular.module('starter.controllers', [])
   Investors.get($stateParams.investorId).then(function(res){
     $scope.investor = res;
   });
+  $scope.removeInvestment = function(investment) {
+    Investments.remove(investment);
+    Investments.get_for($stateParams.investorId).then(function(res){
+      $scope.investments = res;
+    });
+  };
 })
 .controller('ProfitCtrl', function($scope, Contracts, Investments, Expenses) {
   Contracts.all().then(function(res){
@@ -125,9 +144,9 @@ angular.module('starter.controllers', [])
   $scope.profit = function(contract, bill_amount) {
     contract.bill_amount = parseInt(bill_amount);
     Expenses.total_for(contract.id).then(function(res){
-      contract.profit_amount = parseInt(bill_amount) - parseInt(res.total);
+      contract.profit_amount = parseInt(bill_amount) - parseInt(res);
       Contracts.update(contract, contract);
-      Investments.add({amount: contract.profit_amount, description: "Profit from " + contract.name, is_profit: true, date: Date.call()});
+      Investments.add({amount: contract.profit_amount, description: "Profit from " + contract.name, date: Date.call()});
     });
   }
 });
