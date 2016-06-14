@@ -22,7 +22,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
 
     if(window.cordova) {
-      db = $cordovaSQLite.openDB("contractManage.db");
+      db = $cordovaSQLite.openDB("contractManage.db", "1.0", "ContractMgr", -1);
     } else {
       db = window.openDatabase("contractManage.db", "1.0", "ContractMgr", -1);
     }
