@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
 
-.run(function($ionicPlatform, $cordovaSQLite) {
+.run(function($ionicPlatform, Investors) { //, $cordovaSQLite
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -21,16 +21,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       StatusBar.styleDefault();
     }
 
-    if(window.cordova) {
-      db = $cordovaSQLite.openDB("contractManage.db", "1.0", "ContractMgr", -1);
-    } else {
-      db = window.openDatabase("contractManage.db", "1.0", "ContractMgr", -1);
-    }
+    // if(window.cordova) {
+    //   db = $cordovaSQLite.openDB("contractManage.db", "1.0", "ContractMgr", -1);
+    // } else {
+    //   db = window.openDatabase("contractManage.db", "1.0", "ContractMgr", -1);
+    // }
 
-    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS investors (id integer primary key, name text)");
-    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS investments (id integer primary key, investor_id integer, amount integer, date datetime, description text)");
-    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS contracts (id integer primary key, name text, tender_amount integer, date datetime, description text, profit_amount integer, bill_amount integer)");
-    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS expenses (id integer primary key, name text, description text, amount integer, date datetime, contract_id integer)");
+    // $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS investors (id integer primary key, name text)");
+    // $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS investments (id integer primary key, investor_id integer, amount integer, date datetime, description text)");
+    // $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS contracts (id integer primary key, name text, tender_amount integer, date datetime, description text, profit_amount integer, bill_amount integer)");
+    // $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS expenses (id integer primary key, name text, description text, amount integer, date datetime, contract_id integer)");
   });
 })
 

@@ -2,7 +2,8 @@
   <ion-content>
     <ion-list>
       <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="entry in enteries" type="item-text-wrap">
-        <h2>Name: {{ title_of(entry) }}</h2>
+        <h2 ng-show="entry.investor_id">Name: {{ entry.investor_name }}</h2>
+        <h2 ng-hide="entry.investor_id">From Profit</h2>
         <p>Amount: {{ entry.amount }}</p>
         <p>Date: {{ entry.date | date: 'dd MMM yyyy' }}</p>
         <p>{{ entry.description }}</p>

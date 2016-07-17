@@ -1,185 +1,215 @@
 angular.module('starter.services', [])
-.factory('DBA', function($cordovaSQLite, $q, $ionicPlatform) {
-  var self = this;
-
-  // Handle query's and potential errors
-  self.query = function (query, parameters) {
-    parameters = parameters || [];
-    var q = $q.defer();
-
-    $ionicPlatform.ready(function () {
-      $cordovaSQLite.execute(db, query, parameters)
-        .then(function (result) {
-          q.resolve(result);
-        }, function (error) {
-          console.warn('Error encountered: ');
-          console.warn(error);
-          q.reject(error);
-        });
-    });
-    return q.promise;
-  }
-
-  // Proces a result set
-  self.getAll = function(result) {
-    var output = [];
-
-    for (var i = 0; i < result.rows.length; i++) {
-      output.push(result.rows.item(i));
+.factory('ApiService', function($http) {
+  var api_endpoint = 'http://localhost:3000/api/'
+  return {
+    get: function(endpoint) {
+      return $http.get(api_endpoint + endpoint);
+    },
+    post: function(endpoint, params = {}) {
+      return $http({url: api_endpoint + endpoint, data: params, method: "POST"});
+    },
+    delete: function(endpoint) {
+      return $http({url: api_endpoint + endpoint, method: "DELETE"});
+    },
+    update: function(endpoint, params = {}) {
+      return $http({url: api_endpoint + endpoint, data: params, method: "PUT"});
     }
-    return output;
   }
-
-  // Proces a single result
-  self.getById = function(result) {
-    var output = null;
-    output = angular.copy(result.rows.item(0));
-    return output;
-  }
-
-  return self;
 })
-.factory('Investments', function($cordovaSQLite, DBA) {
+.factory('Investments', function(ApiService) {
+  var investments = [];
   return {
     all: function() {
-      return DBA.query("SELECT * FROM investments ORDER BY date DESC").then(function(result){
-        return DBA.getAll(result);
+      return ApiService.get("investments").then(function(response){
+        investments = response.data;
+        return investments;
       });
     },
     get_for: function(investor_id) {
-      return DBA.query("SELECT * FROM investments WHERE investor_id = (?) ORDER BY DATE DESC",[investor_id]).then(function(result){
-        return DBA.getAll(result);
+      return this.all().then(function(res){
+        var selected = [];
+        res.forEach(function(val){
+          if(val.investor_id == investor_id){
+            selected.push(val);
+          }
+        });
+        return selected;
       });
     },
     remove: function(investment) {
-      var parameters = [investment.id];
-      return DBA.query("DELETE FROM investments WHERE id = (?)", parameters);
+      return ApiService.delete("investments/" + investment.id).then(function(response){
+        investments.forEach(function(val, id){
+          if(val.id == investment.id){
+            investments.splice(id, 1);
+          }
+        });
+        var selected = [];
+        investments.forEach(function(val){
+          if(val.investor_id == investment.investor_id){
+            selected.push(val);
+          }
+        });
+        return selected;
+      });
     },
     add: function(investment) {
-      var parameters = [investment.investor_id, investment.amount, investment.date, investment.description];
-      return DBA.query("INSERT INTO investments (investor_id, amount, date, description) VALUES (?,?,?,?)", parameters);
+      ApiService.post("investments", investment).then(function(response){
+        investments.push(response.data);
+      });
     },
     get: function(investmentId) {
-      var parameters = [investmentId];
-      return DBA.query("SELECT * FROM investments WHERE id = (?)", parameters).then(function(result) {
-        return DBA.getById(result);
-      });
+      // var parameters = [investmentId];
+      // return DBA.query("SELECT * FROM investments WHERE id = (?)", parameters).then(function(result) {
+      //   return DBA.getById(result);
+      // });
     },
     update: function(origInvestment, updatedInvestment) {
-      var parameters = [updatedInvestment.id, investment.investor.id, investment.amount, investment.date, investment.description, origInvestment.id];
-      return DBA.query("UPDATE investments SET id = (?), investor_id = (?), amount = (?), date = (?), description = (?) WHERE id = (?)", parameters);
+      // var parameters = [updatedInvestment.id, investment.investor.id, investment.amount, investment.date, investment.description, origInvestment.id];
+      // return DBA.query("UPDATE investments SET id = (?), investor_id = (?), amount = (?), date = (?), description = (?) WHERE id = (?)", parameters);
     },
     total_investment: function(){
-      return DBA.query("Select TOTAL(amount) as total FROM investments WHERE investor_id IS NOT 'undefined'").then(function(result){
-        return DBA.getAll(result)[0].total;
-      });
+      // return DBA.query("Select TOTAL(amount) as total FROM investments WHERE investor_id IS NOT 'undefined'").then(function(result){
+      //   return DBA.getAll(result)[0].total;
+      // });
     },
     total_profit: function(){
-      return DBA.query("Select TOTAL(amount) as total FROM investments WHERE investor_id IS 'undefined'").then(function(result){
-        return DBA.getAll(result)[0].total;
+      var total = 0;
+      investments.forEach(function(val){
+        if(val.investor_id == null){
+          total += val.amount;
+        }
       });
+      return total;
     },
     total_investment_for: function(id){
-      return DBA.query("Select TOTAL(amount) as total FROM investments WHERE investor_id = (?)",[id]).then(function(result){
-        return DBA.getById(result).total;
-      });
+      // return DBA.query("Select TOTAL(amount) as total FROM investments WHERE investor_id = (?)",[id]).then(function(result){
+      //   return DBA.getById(result).total;
+      // });
     }
   };
 })
-.factory('Investors', function($cordovaSQLite, DBA) {
+.factory('Investors', function(ApiService) {
+  var investors = [];
   return {
     all: function() {
-      return DBA.query("SELECT * FROM investors").then(function(result){
-        return DBA.getAll(result);
+      return ApiService.get("investors").then(function(response){
+        investors = response.data;
+        return investors;
       });
     },
     remove: function(investor) {
-      var parameters = [investor.id];
-      return DBA.query("DELETE FROM investors WHERE id = (?)", parameters);
+      // var parameters = [investor.id];
+      // return DBA.query("DELETE FROM investors WHERE id = (?)", parameters);
     },
     add: function(investor) {
-      var parameters = [investor.name];
-      return DBA.query("INSERT INTO investors (name) VALUES (?)", parameters);
+      ApiService.post("investors", investor).then(function(response){
+        investors.push(response.data);
+      });
     },
     get: function(investorId) {
-      var parameters = [investorId];
-      return DBA.query("SELECT * FROM investors WHERE id = (?)", parameters).then(function(result) {
-        return DBA.getById(result);
+      return ApiService.get("investors/" + investorId).then(function(response){
+        return response.data;
       });
     },
     update: function(origInvestor, updatedInvestor) {
-      var parameters = [updatedInvestor.id, updatedInvestor.name, origInvestor.id];
-      return DBA.query("UPDATE investors SET id = (?), name = (?) WHERE id = (?)", parameters);
+      // var parameters = [updatedInvestor.id, updatedInvestor.name, origInvestor.id];
+      // return DBA.query("UPDATE investors SET id = (?), name = (?) WHERE id = (?)", parameters);
     }
   };
 })
-.factory('Contracts', function($cordovaSQLite, DBA) {
+.factory('Contracts', function(ApiService) {
+  var contracts = [];
   return {
     all: function() {
-      return DBA.query("SELECT * FROM contracts ORDER BY date DESC").then(function(result){
-        return DBA.getAll(result);
+      return ApiService.get("contracts").then(function(response){
+        contracts = response.data;
+        return contracts;
       });
     },
     remove: function(contract) {
-      var parameters = [contract.id];
-      return DBA.query("DELETE FROM contracts WHERE id = (?)", parameters);
+      // var parameters = [contract.id];
+      // return DBA.query("DELETE FROM contracts WHERE id = (?)", parameters);
     },
     add: function(contract) {
-      var parameters = [contract.name, contract.tender_amount, contract.description, contract.date];
-      return DBA.query("INSERT INTO contracts (name, tender_amount, description, date) VALUES (?,?,?,?)", parameters);
+      ApiService.post("contracts", contract).then(function(response){
+        contracts.push(response.data);
+      });
     },
     get: function(contractId) {
-      var parameters = [contractId];
-      return DBA.query("SELECT * FROM contracts WHERE id = (?)", parameters).then(function(result) {
-        return DBA.getById(result);
+      return ApiService.get("contracts/" + contractId).then(function(response){
+        return response.data;
       });
     },
-    update: function(origCont, updatedCont) {
-      var parameters = [updatedCont.id, updatedCont.name, updatedCont.tender_amount, updatedCont.description, updatedCont.date, updatedCont.profit_amount, updatedCont.bill_amount, origCont.id];
-      return DBA.query("UPDATE contracts SET id = (?), name = (?), tender_amount = (?), description = (?), date = (?), profit_amount = (?), bill_amount = (?) WHERE id = (?)", parameters);
+    update: function(updatedCont) {
+      ApiService.update("contracts/" + updatedCont.id, updatedCont).then(function(response){
+      });
     },
     total_tender: function() {
-      return DBA.query("Select TOTAL(tender_amount) as total FROM contracts").then(function(result){
-        return DBA.getAll(result)[0].total;
-      });
+      // return DBA.query("Select TOTAL(tender_amount) as total FROM contracts").then(function(result){
+      //   return DBA.getAll(result)[0].total;
+      // });
     }
   };
 })
-.factory('Expenses', function($cordovaSQLite, DBA) {
+.factory('Expenses', function(ApiService) {
+  var expenses = [];
   return {
     all: function() {
-      return DBA.query("SELECT * FROM expenses ORDER BY date DESC").then(function(result){
-        return DBA.getAll(result);
+      return ApiService.get("expenses").then(function(response){
+        expenses = response.data;
+        return expenses;
       });
     },
     remove: function(expense) {
-      var parameters = [expense.id];
-      return DBA.query("DELETE FROM expenses WHERE id = (?)", parameters);
+      return ApiService.delete("expenses/" + expense.id).then(function(response){
+        expenses.forEach(function(val, id){
+          if(val.id == expense.id){
+            expenses.splice(id, 1);
+          }
+        });
+        var selected = [];
+        expenses.forEach(function(val){
+          if(val.contract_id == expense.contract_id){
+            selected.push(val);
+          }
+        });
+        return selected;
+      });
     },
     add: function(expense) {
-      var parameters = [expense.name, expense.amount, expense.description, expense.date, expense.contract_id];
-      return DBA.query("INSERT INTO expenses (name, amount, description, date, contract_id) VALUES (?,?,?,?,?)", parameters);
+      ApiService.post("expenses", expense).then(function(response){
+        expenses.push(response.data);
+      });
     },
     get: function(expenseId) {
-      var parameters = [expenseId];
-      return DBA.query("SELECT * FROM expenses WHERE id = (?)", parameters).then(function(result) {
-        return DBA.getById(result);
+      return ApiService.get("expenses/" + expenseId).then(function(response){
+        return response.data;
       });
     },
     total_expense: function() {
-      return DBA.query("Select TOTAL(amount) as total FROM expenses").then(function(result){
-        return DBA.getAll(result)[0].total;
-      });
+      // return DBA.query("Select TOTAL(amount) as total FROM expenses").then(function(result){
+      //   return DBA.getAll(result)[0].total;
+      // });
     },
     all_for: function(contract_id) {
-      return DBA.query("Select * FROM expenses WHERE contract_id = (?) ORDER BY date DESC", [contract_id]).then(function(result){
-        return DBA.getAll(result);
+      return this.all().then(function(res){
+        var selected = [];
+        res.forEach(function(val){
+          if(val.contract_id == contract_id){
+            selected.push(val);
+          }
+        });
+        return selected;
       });
     },
     total_for: function(contract_id) {
-      return DBA.query("Select TOTAL(amount) as total FROM expenses WHERE contract_id = (?)", [contract_id]).then(function(result){
-        return DBA.getById(result).total;
+      var total = 0;
+      expenses.forEach(function(val){
+        if(val.contract_id == contract_id){
+          total += val.amount;
+        }
       });
+      return total;
     }
   };
 });
