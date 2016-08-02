@@ -15,22 +15,19 @@ angular.module('starter.services', [])
     }
   };
 })
-.config(['$httpProvider', function($httpProvider) {
-  $httpProvider.interceptors.push('authorizationInterceptor');
-}])
 .factory('ApiService', function($http, $window) {
-  var api_endpoint = 'http://contracts-api.herokuapp.com/api/'
+  var api_endpoint = 'http://contracts-api.herokuapp.com/api/';
   return {
     get: function(endpoint) {
       return $http.get(api_endpoint + endpoint);
     },
-    post: function(endpoint, params = {}) {
+    post: function(endpoint, params) {
       return $http({url: api_endpoint + endpoint, data: params, method: "POST"});
     },
     delete: function(endpoint) {
       return $http({url: api_endpoint + endpoint, method: "DELETE"});
     },
-    update: function(endpoint, params = {}) {
+    update: function(endpoint, params) {
       return $http({url: api_endpoint + endpoint, data: params, method: "PUT"});
     }
   }
