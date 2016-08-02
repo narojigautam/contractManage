@@ -1,36 +1,15 @@
-// Ionic Starter App
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.services' is found in services.js
-// 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
-
-.run(function($ionicPlatform) { //, $cordovaSQLite
+.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
-
     }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
-
-    // if(window.cordova) {
-    //   db = $cordovaSQLite.openDB("contractManage.db", "1.0", "ContractMgr", -1);
-    // } else {
-    //   db = window.openDatabase("contractManage.db", "1.0", "ContractMgr", -1);
-    // }
-
-    // $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS investors (id integer primary key, name text)");
-    // $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS investments (id integer primary key, investor_id integer, amount integer, date datetime, description text)");
-    // $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS contracts (id integer primary key, name text, tender_amount integer, date datetime, description text, profit_amount integer, bill_amount integer)");
-    // $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS expenses (id integer primary key, name text, description text, amount integer, date datetime, contract_id integer)");
   });
 })
 
@@ -48,8 +27,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     abstract: true,
     templateUrl: 'templates/tabs.html'
   })
-
-  // Each tab has its own nav history stack:
 
   .state('tab.investments', {
     url: '/investments',
