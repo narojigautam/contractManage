@@ -12,7 +12,7 @@
       </div>
     </div>
     <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="contract in contracts" type="item-text-wrap" href="#/tab/contracts/{{contract.id}}">
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="contract in contracts | orderBy:'date'" type="item-text-wrap" href="#/tab/contracts/{{contract.id}}">
         <h2>{{contract.name}}</h2>
         <p>{{contract.description}}</p>
         <p>Date: {{contract.date | date: 'dd MMM yyyy'}}</p>

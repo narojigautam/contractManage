@@ -1,4 +1,7 @@
 <ion-view cache-view="false" view-title="Investors">
+  <ion-nav-buttons side="primary">
+    <a class="button button-clear button-positive" ng-click="logout()">Logout</a>
+  </ion-nav-buttons>
   <ion-nav-buttons side="secondary">
     <a class="button button-clear button-positive" href="#/tab/investors/new">Add</a>
   </ion-nav-buttons>
@@ -19,10 +22,11 @@
       </div>
     </div>
     <ion-list>
-      <ion-item class="item item-icon-right" ng-repeat="investor in investors" type="item-text-wrap" href="#/tab/investors/{{investor.id}}">
+      <ion-item class="item item-remove-animate item-icon-right" ng-repeat="investor in investors" type="item-text-wrap" href="#/tab/investors/{{investor.id}}">
         <h2>{{investor.id}} : {{ investor.name }}</h2>
         <p>Total investment: {{ total_investment_for(investor) }}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
+        <ion-option-button class="ion-minus-circled" ng-click="remove(investor)"></ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>

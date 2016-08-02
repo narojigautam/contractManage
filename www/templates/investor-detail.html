@@ -4,7 +4,7 @@
   </ion-nav-buttons>
   <ion-content class="padding">
     <ion-list>
-      <ion-item class="item item-button-right" ng-repeat="investment in investments" type="item-text-wrap">
+      <ion-item class="item item-button-right" ng-repeat="investment in investments|orderBy:'date'" type="item-text-wrap">
         <p>Amount: {{investment.amount}}</p>
         <p>Date: {{investment.date | date: 'dd MMM yyyy'}}</p>
         <p>{{investment.description}}</p>

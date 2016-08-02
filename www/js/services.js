@@ -1,6 +1,25 @@
 angular.module('starter.services', [])
-.factory('ApiService', function($http) {
-  var api_endpoint = 'http://localhost:3000/api/'
+.factory('authorizationInterceptor', function($window) {
+  return {
+    request: function (config) {
+      var token = $window.localStorage['contractManageToken'];
+      var client = $window.localStorage['contractManageClient'];
+      var uid = $window.localStorage['contractManageUid'];
+      config.headers = config.headers || {};
+      if (token) {
+        config.headers['access-token'] = token;
+        config.headers['client'] = client;
+        config.headers['uid'] = uid;
+      }
+      return config;
+    }
+  };
+})
+.config(['$httpProvider', function($httpProvider) {
+  $httpProvider.interceptors.push('authorizationInterceptor');
+}])
+.factory('ApiService', function($http, $window) {
+  var api_endpoint = 'http://contracts-api.herokuapp.com/api/'
   return {
     get: function(endpoint) {
       return $http.get(api_endpoint + endpoint);
@@ -68,9 +87,13 @@ angular.module('starter.services', [])
       // return DBA.query("UPDATE investments SET id = (?), investor_id = (?), amount = (?), date = (?), description = (?) WHERE id = (?)", parameters);
     },
     total_investment: function(){
-      // return DBA.query("Select TOTAL(amount) as total FROM investments WHERE investor_id IS NOT 'undefined'").then(function(result){
-      //   return DBA.getAll(result)[0].total;
-      // });
+      var total = 0;
+      investments.forEach(function(val){
+        if(val.investor_id != null){
+          total += val.amount;
+        }
+      });
+      return total;
     },
     total_profit: function(){
       var total = 0;
@@ -82,9 +105,13 @@ angular.module('starter.services', [])
       return total;
     },
     total_investment_for: function(id){
-      // return DBA.query("Select TOTAL(amount) as total FROM investments WHERE investor_id = (?)",[id]).then(function(result){
-      //   return DBA.getById(result).total;
-      // });
+      var total = 0;
+      investments.forEach(function(val){
+        if(val.investor_id == id){
+          total += val.amount;
+        }
+      });
+      return total;
     }
   };
 })
@@ -98,8 +125,13 @@ angular.module('starter.services', [])
       });
     },
     remove: function(investor) {
-      // var parameters = [investor.id];
-      // return DBA.query("DELETE FROM investors WHERE id = (?)", parameters);
+      return ApiService.delete("investors/" + investor.id).then(function(response){
+        investors.forEach(function(val, id){
+          if(val.id == investor.id){
+            investors.splice(id, 1);
+          }
+        });
+      });
     },
     add: function(investor) {
       ApiService.post("investors", investor).then(function(response){
@@ -145,9 +177,11 @@ angular.module('starter.services', [])
       });
     },
     total_tender: function() {
-      // return DBA.query("Select TOTAL(tender_amount) as total FROM contracts").then(function(result){
-      //   return DBA.getAll(result)[0].total;
-      // });
+      var total = 0;
+      contracts.forEach(function(val){
+        total += parseInt(val.tender_amount);
+      });
+      return total;
     }
   };
 })
@@ -187,9 +221,11 @@ angular.module('starter.services', [])
       });
     },
     total_expense: function() {
-      // return DBA.query("Select TOTAL(amount) as total FROM expenses").then(function(result){
-      //   return DBA.getAll(result)[0].total;
-      // });
+      var total = 0;
+      expenses.forEach(function(val){
+        total += val.amount;
+      });
+      return total;
     },
     all_for: function(contract_id) {
       return this.all().then(function(res){
@@ -212,4 +248,28 @@ angular.module('starter.services', [])
       return total;
     }
   };
+})
+.factory('LoginService', function($q, $window, $http, ApiService) {
+    return {
+        loginUser: function(name, pw) {
+            return ApiService.post("auth/sign_in", {email: name, password: pw}).then(function(response){
+              $window.localStorage['contractManageToken'] = response.headers("access-token");
+              $window.localStorage['contractManageUid'] = response.headers("uid");
+              $window.localStorage['contractManageClient'] = response.headers("client");
+              return response;
+            }, function(response){
+              return response;
+            });
+        },
+        validateToken: function(){
+          var token = $window.localStorage['contractManageToken'];
+          var client = $window.localStorage['contractManageClient'];
+          var uid = $window.localStorage['contractManageUid'];
+          return ApiService.get("auth/validate_token.json?uid=" + uid + "&client=" + client + "&access-token=" + token).then(function(response) {
+            return response;
+          }, function(response) {
+            return response;
+          });
+        }
+    }
 });

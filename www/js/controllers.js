@@ -3,13 +3,10 @@ angular.module('starter.controllers', [])
 .controller('InvestmentsCtrl', function($scope, $stateParams, Investments, Expenses, Investors) {
   Investments.all().then(function(res){
     $scope.enteries = res;
+    Expenses.all().then(function(res){
+      $scope.enteries = $scope.enteries.concat(res);
+    });
   });
-  // Expenses.all().then(function(res){
-  //   $scope.enteries = $scope.enteries.concat(res);
-  // });
-  $scope.removeEntry = function(entry) {
-    Investments.remove(investment);
-  };
 })
 .controller('InvestmentNewCtrl', function($scope, $stateParams, Investments, Investors) {
   $scope.investment = {investor_id: $stateParams.investorId};
@@ -28,19 +25,16 @@ angular.module('starter.controllers', [])
 
   Contracts.all().then(function(res){
     $scope.contracts = res;
+    $scope.total_tender = Contracts.total_tender();
   });
-  // Expenses.total_expense().then(function(res){
-  //   $scope.total_expense = res;
-  // });
-  // Contracts.total_tender().then(function(res){
-  //   $scope.total_tender = res;
-  // });
-  // $scope.total_expense_for = function(contract) {
-  //   Expenses.total_for(contract.id).then(function(res){
-  //     contract.total_expense = res;
-  //   });
-  //   return contract.total_expense;
-  // }
+  Expenses.all().then(function(){
+    $scope.total_expense = Expenses.total_expense();
+  });
+
+  $scope.total_expense_for = function(contract) {
+    contract.total_expense = Expenses.total_for(contract.id);
+    return contract.total_expense;
+  }
 })
 
 .controller('ContractDetailCtrl', function($scope, $stateParams, Contracts, Expenses) {
@@ -71,31 +65,41 @@ angular.module('starter.controllers', [])
     Expenses.add(expense);
   }
 })
-.controller('InvestorsCtrl', function($scope, Investors, Investments, Expenses) {
+.controller('InvestorsCtrl', function($scope, $window, $state, Investors, Investments, Expenses, LoginService) {
+  if($window.localStorage['contractManageToken']) {
+    LoginService.validateToken().then(function(res){
+      if(res.status != 200) {
+        $window.localStorage.removeItem('contractManageToken');
+        $window.localStorage.removeItem('contractManageClient');
+        $window.localStorage.removeItem('contractManageUid');
+        $state.go('login');
+      }
+    });
+  }
   Investors.all().then(function(res){
     $scope.investors = res;
   });
   Investments.all().then(function(res){
     $scope.investments = res;
+    $scope.total_investment = Investments.total_investment();
+    $scope.total_profit = Investments.total_profit();
   });
-  // Investments.total_investment().then(function(res){
-  //   $scope.total_investment = res;
-  // });
-  // Investments.total_profit().then(function(res){
-  //   $scope.total_profit = res;
-  // });
-  // Expenses.total_expense().then(function(res){
-  //   $scope.total_expense = res;
-  // });
+  Expenses.all().then(function(res){
+    $scope.total_expense = Expenses.total_expense();
+  });
   $scope.total_investment_for = function(investor) {
-    // Investments.total_investment_for(investor.id).then(function(res){
-    //   investor.total_investment = res;
-    // });
+    investor.total_investment = Investments.total_investment_for(investor.id);
     return investor.total_investment;
   }
   $scope.remove = function(investor) {
     Investors.remove(investor);
   };
+  $scope.logout = function() {
+    $window.localStorage.removeItem('contractManageToken');
+    $window.localStorage.removeItem('contractManageClient');
+    $window.localStorage.removeItem('contractManageUid');
+    $state.go('login');
+  }
 })
 .controller('InvestorNewCtrl', function($scope, Investors) {
   $scope.investor = {};
@@ -131,5 +135,32 @@ angular.module('starter.controllers', [])
     contract.profit_amount = parseInt(bill_amount) - parseInt(expense_amt);
     Contracts.update(contract);
     Investments.add({amount: contract.profit_amount, description: "Profit from " + contract.name, date: Date.call()});
+  }
+})
+.controller('LoginCtrl', function($scope, $ionicPopup, $state, $window, LoginService) {
+  $scope.data = {};
+  if($window.localStorage['contractManageToken']) {
+    LoginService.validateToken().then(function(res){
+      if(res.status == 200) {
+        $state.go('tab.investors');
+      } else {
+        $window.localStorage.removeItem('contractManageToken');
+        $window.localStorage.removeItem('contractManageClient');
+        $window.localStorage.removeItem('contractManageUid');
+      }
+    });
+  }
+
+  $scope.login = function() {
+    LoginService.loginUser($scope.data.username, $scope.data.password).then(function(data) {
+      if(data.status == 200) {
+        $state.go('tab.investors');
+      } else {
+        var alertPopup = $ionicPopup.alert({
+          title: 'Login failed!',
+          template: 'Please check your credentials!'
+        });
+      }
+    });
   }
 });
