@@ -269,4 +269,68 @@ angular.module('starter.services', [])
           });
         }
     }
+})
+.factory('Payments', function(ApiService) {
+  var payments = [];
+  return {
+    all: function() {
+      return ApiService.get("payments").then(function(response){
+        payments = response.data;
+        return payments;
+      });
+    },
+    remove: function(payment) {
+      return ApiService.delete("payments/" + payment.id).then(function(response){
+        payments.forEach(function(val, id){
+          if(val.id == payment.id){
+            payments.splice(id, 1);
+          }
+        });
+        var selected = [];
+        payments.forEach(function(val){
+          if(val.contract_id == payment.contract_id){
+            selected.push(val);
+          }
+        });
+        return selected;
+      });
+    },
+    add: function(payment) {
+      ApiService.post("payments", payment).then(function(response){
+        payments.push(response.data);
+      });
+    },
+    get: function(paymentId) {
+      return ApiService.get("payments/" + paymentId).then(function(response){
+        return response.data;
+      });
+    },
+    total_payments: function() {
+      var total = 0;
+      payments.forEach(function(val){
+        total += val.amount;
+      });
+      return total;
+    },
+    all_for: function(contract_id) {
+      return this.all().then(function(res){
+        var selected = [];
+        res.forEach(function(val){
+          if(val.contract_id == contract_id){
+            selected.push(val);
+          }
+        });
+        return selected;
+      });
+    },
+    total_for: function(contract_id) {
+      var total = 0;
+      payments.forEach(function(val){
+        if(val.contract_id == contract_id){
+          total += val.amount;
+        }
+      });
+      return total;
+    }
+  };
 });

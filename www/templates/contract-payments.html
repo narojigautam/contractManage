@@ -1,0 +1,16 @@
+<ion-view cache-view="false" view-title="{{contract.name}}">
+  <ion-nav-buttons side="secondary">
+    <a class="button button-clear button-positive" href="#/tab/contracts/{{contract.id}}/payments/new">Add Payment</a>
+  </ion-nav-buttons>
+  <ion-content class="padding">
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="payment in payments|orderBy:'date'" type="item-text-wrap">
+        <h2>{{ payment.name }}</h2>
+        <p>{{ payment.description }}</p>
+        <p>Date: {{ payment.date | date: 'dd MMM yyyy' }}</p>
+        <p>Amount: {{ payment.amount }}</p>
+        <ion-option-button class="ion-minus-circled" ng-click="removePayment(payment)"></ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

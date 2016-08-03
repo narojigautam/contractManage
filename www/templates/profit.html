@@ -4,14 +4,16 @@
       <div class="item item-text-wrap">
         <div class="row">
           <div class="col">Total Profit: {{ total_profit }}</div>
+          <div class="col">Total Payments Received: {{ total_payments }}</div>
         </div>
       </div>
     </div>
     <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="contract in contracts" type="item-text-wrap">
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="contract in contracts" type="item-text-wrap" href="#/tab/contract_payments/{{contract.id}}">
         <h2>{{contract.name}}</h2>
         <p>{{contract.description}}</p>
         <p>Tender Amount: {{contract.tender_amount}}</p>
+        <p>Payment Received Amount: {{ total_payment_for(contract) }}</p>
         <p ng-show="contract.bill_amount">Billed Amount: {{contract.bill_amount}}</p>
         <div ng-hide="contract.bill_amount">
           <label class="item item-input">

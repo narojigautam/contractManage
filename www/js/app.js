@@ -73,12 +73,30 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     }
   })
+  .state('tab.payment-new', {
+    url: '/contracts/:contractId/payments/new',
+    views: {
+      'tab-profit': {
+        templateUrl: 'templates/payment-new.html',
+        controller: 'PaymentNewCtrl'
+      }
+    }
+  })
   .state('tab.contract-detail', {
     url: '/contracts/:contractId',
     views: {
       'tab-contracts': {
         templateUrl: 'templates/contract-detail.html',
         controller: 'ContractDetailCtrl'
+      }
+    }
+  })
+  .state('tab.contract-payments', {
+    url: '/contract_payments/:contractId',
+    views: {
+      'tab-profit': {
+        templateUrl: 'templates/contract-payments.html',
+        controller: 'ContractPaymentsCtrl'
       }
     }
   })

@@ -1,9 +1,12 @@
 angular.module('starter.controllers', [])
 
-.controller('InvestmentsCtrl', function($scope, $stateParams, Investments, Expenses, Investors) {
+.controller('InvestmentsCtrl', function($scope, $stateParams, Investments, Expenses, Payments) {
   Investments.all().then(function(res){
     $scope.enteries = res;
     Expenses.all().then(function(res){
+      $scope.enteries = $scope.enteries.concat(res);
+    });
+    Payments.all().then(function(res){
       $scope.enteries = $scope.enteries.concat(res);
     });
   });
@@ -36,7 +39,6 @@ angular.module('starter.controllers', [])
     return contract.total_expense;
   }
 })
-
 .controller('ContractDetailCtrl', function($scope, $stateParams, Contracts, Expenses) {
   Contracts.get($stateParams.contractId).then(function(res){
     $scope.contract = res;
@@ -50,22 +52,38 @@ angular.module('starter.controllers', [])
     });
   };
 })
+.controller('ContractPaymentsCtrl', function($scope, $stateParams, Contracts, Payments) {
+  Contracts.get($stateParams.contractId).then(function(res){
+    $scope.contract = res;
+  });
+  Payments.all_for($stateParams.contractId).then(function(res){
+    $scope.payments = res;
+  });
+  $scope.removePayment = function(payment) {
+    Payments.remove(payment).then(function(res){
+      $scope.payments = res;
+    });
+  };
+})
 .controller('ContractNewCtrl', function($scope, Contracts) {
   $scope.contract = {};
   $scope.save = function(contract) {
     Contracts.add(contract);
   }
 })
-.controller('ExpenseNewCtrl', function($scope, $stateParams, Expenses, Investors) {
+.controller('ExpenseNewCtrl', function($scope, $stateParams, Expenses) {
   $scope.expense = { contract_id: parseInt($stateParams.contractId) };
-  Investors.all().then(function(res){
-    $scope.investors = res;
-  });
   $scope.save = function(expense) {
     Expenses.add(expense);
   }
 })
-.controller('InvestorsCtrl', function($scope, $window, $state, Investors, Investments, Expenses, LoginService) {
+.controller('PaymentNewCtrl', function($scope, $stateParams, Payments) {
+  $scope.payment = { contract_id: parseInt($stateParams.contractId) };
+  $scope.save = function(payment) {
+    Payments.add(payment);
+  }
+})
+.controller('InvestorsCtrl', function($scope, $window, $state, Investors, Investments, Expenses, LoginService, Payments) {
   if($window.localStorage['contractManageToken']) {
     LoginService.validateToken().then(function(res){
       if(res.status != 200) {
@@ -86,6 +104,9 @@ angular.module('starter.controllers', [])
   });
   Expenses.all().then(function(res){
     $scope.total_expense = Expenses.total_expense();
+  });
+  Payments.all().then(function(res){
+    $scope.total_payments = Payments.total_payments();
   });
   $scope.total_investment_for = function(investor) {
     investor.total_investment = Investments.total_investment_for(investor.id);
@@ -121,7 +142,7 @@ angular.module('starter.controllers', [])
     });
   };
 })
-.controller('ProfitCtrl', function($scope, Contracts, Investments, Expenses) {
+.controller('ProfitCtrl', function($scope, Contracts, Investments, Expenses, Payments) {
   Contracts.all().then(function(res){
     $scope.contracts = res;
   });
@@ -129,6 +150,14 @@ angular.module('starter.controllers', [])
     $scope.expenses = res;
   });
   $scope.total_profit = Investments.total_profit();
+  Payments.all().then(function(res){
+    $scope.total_payments = Payments.total_payments();
+  });
+
+  $scope.total_payment_for = function(contract) {
+    contract.total_payment = Payments.total_for(contract.id);
+    return contract.total_payment;
+  }
   $scope.profit = function(contract, bill_amount) {
     contract.bill_amount = parseInt(bill_amount);
     expense_amt = Expenses.total_for(contract.id)

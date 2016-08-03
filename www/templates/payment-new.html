@@ -1,0 +1,21 @@
+<ion-view view-title="Add Received Payment">
+  <ion-content class="padding">
+    <div class="list">
+      <label class="item item-input">
+        <input type="text" placeholder="Name" ng-model="payment.name">
+      </label>
+      <label class="item item-input">
+        <input type="text" placeholder="Description" ng-model="payment.description">
+      </label>
+      <label class="item item-input">
+        <input type="number" placeholder="Amount" ng-model="payment.amount">
+      </label>
+      <label class="item item-input">
+        <input type="date" placeholder="Date" ng-model="payment.date">
+      </label>
+    </div>
+    <a class="button button-full button-positive" ng-click="save(payment)" href="#/tab/contract_payments/{{payment.contract_id}}">
+      Save
+    </a>
+  </ion-content>
+</ion-view>
