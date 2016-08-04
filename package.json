@@ -20,7 +20,8 @@
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
     "cordova-plugin-splashscreen",
-    "cordova-plugin-console"
+    "cordova-plugin-console",
+    "cordova-plugin-network-information"
   ],
   "cordovaPlatforms": [
     "ios"
